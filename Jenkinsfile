@@ -1,10 +1,6 @@
 pipeline {
     agent any
 
-    tools {
-        dockerTool 'latest'
-    }
-
     environment {
         IMAGE_NAME = "${env.GIT_URL}".toLowerCase().split('/').last().replaceAll('.git', '')
         IMAGE_REPO = "${DOCKER_REGISTRY_URL}/${IMAGE_NAME}"
