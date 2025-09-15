@@ -37,7 +37,7 @@ pipeline {
                 script {
                     echo "Publishing Docker image ${IMAGE_REPO} with all its tags"
 
-                    sh "docker login ${env.DOCKER_REGISTRY_URL} -u ${env.DOCKER_REGISTRY_USER} -p ${env.DOCKER_REGISTRY_PASS}"
+                    sh "docker login ${env.DOCKER_REGISTRY_URL} -u '${env.DOCKER_REGISTRY_USER}' -p '${env.DOCKER_REGISTRY_PASS}'"
                     sh "docker push --all-tags ${IMAGE_REPO}"
                 }
             }
