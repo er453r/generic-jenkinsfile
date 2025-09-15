@@ -10,9 +10,6 @@ pipeline {
         stage('Build') {
             steps {
                 script {
-                    sh 'env | sort'
-                    sh 'ls -la'
-
                     echo "Dynamically determined IMAGE_NAME: ${IMAGE_NAME}"
 
                     def dockerTagArgs = " --tag ${IMAGE_REPO}:${env.BRANCH_NAME.replaceAll('/', '-')}"
