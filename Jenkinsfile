@@ -15,6 +15,7 @@ pipeline {
             steps {
                 script {
                     sh 'env | sort'
+                    sh 'ls -la'
 
                     echo "Dynamically determined IMAGE_NAME: ${IMAGE_NAME}"
 
