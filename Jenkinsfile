@@ -6,7 +6,7 @@ pipeline {
     }
 
     environment {
-        IMAGE_NAME = "${env.JOB_BASE_NAME ?: env.JOB_NAME}".toLowerCase().split('/').last()
+        IMAGE_NAME = "${env.GIT_URL}".toLowerCase().split('/').last().replaceAll('.git', '')
         IMAGE_REPO = "${DOCKER_REGISTRY_URL}/${IMAGE_NAME}"
     }
 
@@ -18,19 +18,11 @@ pipeline {
 
                     echo "Dynamically determined IMAGE_NAME: ${IMAGE_NAME}"
 
-                    def dockerTagArgs = ""
-                    dockerTagArgs += " --tag ${IMAGE_REPO}:${BUILD_NUMBER}"
-
-                    if (env.BRANCH_NAME) {
-                        def safeBranchName = env.BRANCH_NAME.replaceAll('/', '-')
-                        echo "Building for branch: ${env.BRANCH_NAME}. Using sanitized tag: ${safeBranchName}"
-                        dockerTagArgs += " --tag ${IMAGE_REPO}:${safeBranchName}"
-                    }
+                    def dockerTagArgs = " --tag ${IMAGE_REPO}:${env.BRANCH_NAME.replaceAll('/', '-')}"
 
                     if (env.TAG_NAME) {
                         echo "Building for Git tag: ${env.TAG_NAME}"
                         dockerTagArgs += " --tag ${IMAGE_REPO}:${env.TAG_NAME}"
-                        dockerTagArgs += " --tag ${IMAGE_REPO}:latest"
                     }
 
                     echo "Executing docker build with tags:${dockerTagArgs}"
