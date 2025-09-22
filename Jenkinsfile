@@ -57,7 +57,7 @@ pipeline {
                         sh "docker build --output=${OUTPUT_DIR} --target=binaries ."
 
                         if (env.TAG_NAME) {
-                            def OUTPUT_DIR = "${env.BINARIES_DIR}/${IMAGE_NAME}/${env.TAG_NAME}"
+                            OUTPUT_DIR = "${env.BINARIES_DIR}/${IMAGE_NAME}/${env.TAG_NAME}"
 
                             echo "Publishing tag binaries to ${OUTPUT_DIR}"
                             sh "docker build --output=${OUTPUT_DIR} --target=binaries ."
