@@ -26,6 +26,10 @@ pipeline {
         }
 
         stage('Publish') {
+            when {
+              expression { env.DOCKER_REGISTRY_URL }
+            }
+
             steps {
                 script {
                     echo "Publishing Docker image ${IMAGE_REPO} with all its tags"
@@ -35,6 +39,29 @@ pipeline {
 
                     if (env.TAG_NAME) {
                         sh "docker push ${IMAGE_REPO}:${env.TAG_NAME}"
+                    }
+                }
+            }
+        }
+
+        stage('Binaries') {
+            when {
+              expression { env.BINARIES_DIR }
+            }
+
+            steps {
+                script {
+                    if (readFile('Dockerfile').toLowerCase().contains('FROM scratch AS binaries'.toLowerCase())) {
+                        def OUTPUT_DIR = "${env.BINARIES_DIR}/${IMAGE_NAME}/${env.BRANCH_NAME.replaceAll('/', '-')}"
+                        echo "Publishing branch binaries to ${OUTPUT_DIR}"
+                        sh "docker build --output=${OUTPUT_DIR} --target=binaries ."
+
+                        if (env.TAG_NAME) {
+                            def OUTPUT_DIR = "${env.BINARIES_DIR}/${IMAGE_NAME}/${env.TAG_NAME}"
+
+                            echo "Publishing tag binaries to ${OUTPUT_DIR}"
+                            sh "docker build --output=${OUTPUT_DIR} --target=binaries ."
+                        }
                     }
                 }
             }
