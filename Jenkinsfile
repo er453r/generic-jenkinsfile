@@ -14,11 +14,6 @@ pipeline {
 
                     def dockerTagArgs = " --tag ${IMAGE_REPO}:${env.BRANCH_NAME.replaceAll('/', '-')}"
 
-                    if (env.TAG_NAME) {
-                        echo "Building for Git tag: ${env.TAG_NAME}"
-                        dockerTagArgs += " --tag ${IMAGE_REPO}:${env.TAG_NAME}"
-                    }
-
                     echo "Executing docker build with tags:${dockerTagArgs}"
                     sh "docker build ${dockerTagArgs} ."
                 }
@@ -36,10 +31,6 @@ pipeline {
 
                     sh "docker login ${env.DOCKER_REGISTRY_URL} -u '${env.DOCKER_REGISTRY_USER}' -p '${env.DOCKER_REGISTRY_PASS}'"
                     sh "docker push ${IMAGE_REPO}:${env.BRANCH_NAME.replaceAll('/', '-')}"
-
-                    if (env.TAG_NAME) {
-                        sh "docker push ${IMAGE_REPO}:${env.TAG_NAME}"
-                    }
                 }
             }
         }
@@ -55,13 +46,6 @@ pipeline {
                         def OUTPUT_DIR = "${env.BINARIES_DIR}/${IMAGE_NAME}/${env.BRANCH_NAME.replaceAll('/', '-')}"
                         echo "Publishing branch binaries to ${OUTPUT_DIR}"
                         sh "docker build --output=${OUTPUT_DIR} --target=binaries ."
-
-                        if (env.TAG_NAME) {
-                            OUTPUT_DIR = "${env.BINARIES_DIR}/${IMAGE_NAME}/${env.TAG_NAME}"
-
-                            echo "Publishing tag binaries to ${OUTPUT_DIR}"
-                            sh "docker build --output=${OUTPUT_DIR} --target=binaries ."
-                        }
                     }
                 }
             }
