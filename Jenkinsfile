@@ -60,28 +60,28 @@ pipeline {
         success{
             echo "Success"
 
-            when {
-              expression { env.DOCKER_REGISTRY_URL }
+            script {
+                if(env.DOCKER_REGISTRY_URL){
+                    discordSend webhookURL: DISCORD_WEBHOOK_URL,
+                            successful: true,
+                            title: "Build Success",
+                            link: env.BUILD_URL,
+                            description: ":white_check_mark: $DISCORD_MESSAGE"
+                }
             }
-
-            discordSend webhookURL: DISCORD_WEBHOOK_URL,
-                    successful: true,
-                    title: "Build Success",
-                    link: env.BUILD_URL,
-                    description: ":white_check_mark: $DISCORD_MESSAGE"
         }
         failure {
             echo "Failure"
 
-            when {
-              expression { env.DOCKER_REGISTRY_URL }
+            script {
+                if(env.DOCKER_REGISTRY_URL){
+                    discordSend webhookURL: DISCORD_WEBHOOK_URL,
+                            successful: false,
+                            title: "Build Failed",
+                            link: env.BUILD_URL,
+                            description: ":poop: $DISCORD_MESSAGE"
+                }
             }
-
-            discordSend webhookURL: DISCORD_WEBHOOK_URL,
-                    successful: false,
-                    title: "Build Failed",
-                    link: env.BUILD_URL,
-                    description: ":poop: $DISCORD_MESSAGE"
         }
     }
 }
