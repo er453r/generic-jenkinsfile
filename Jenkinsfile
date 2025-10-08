@@ -11,6 +11,8 @@ pipeline {
         stage('Build') {
             steps {
                 script {
+                    sh 'printenv'
+
                     echo "Dynamically determined IMAGE_NAME: ${IMAGE_NAME}"
 
                     def dockerTagArgs = " --tag ${IMAGE_REPO}:${env.BRANCH_NAME.replaceAll('/', '-')}"
