@@ -62,6 +62,10 @@ pipeline {
         success{
             echo "Success"
 
+            when {
+              expression { env.DOCKER_REGISTRY_URL }
+            }
+
             script {
                 if(env.DOCKER_REGISTRY_URL){
                     discordSend webhookURL: DISCORD_WEBHOOK_URL,
