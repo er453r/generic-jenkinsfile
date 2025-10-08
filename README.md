@@ -13,6 +13,7 @@
 - Dark Theme
 - Locale
 - Pipeline: Stage View
+- Discord Notifier
 
 # Steps
 
