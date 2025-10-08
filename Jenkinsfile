@@ -14,7 +14,7 @@ pipeline {
                     env.GIT_COMMITTER_NAME = sh(returnStdout: true, script: 'git log -1 --pretty=%cn').trim()
                     env.GIT_COMMITTER_EMAIL = sh(returnStdout: true, script: 'git log -1 --pretty=%ce').trim()
 
-                    env.DISCORD_MESSAGE = "`${IMAGE_NAME}:${env.BRANCH_NAME.replaceAll('/', '-')} (${GIT_COMMIT.substring(0,8)})` build by `${GIT_COMMITTER_NAME}`\n> `${GIT_COMMIT_MESSAGE}`"
+                    env.DISCORD_MESSAGE = "`${IMAGE_NAME}:${env.BRANCH_NAME.replaceAll('/', '-')} (${GIT_COMMIT.substring(0,8)})` build by `${GIT_COMMITTER_NAME}`\n\n> ${GIT_COMMIT_MESSAGE}"
 
                     echo "Dynamically determined IMAGE_NAME: ${IMAGE_NAME}"
 
