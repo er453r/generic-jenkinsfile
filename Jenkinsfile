@@ -4,7 +4,7 @@ pipeline {
     environment {
         IMAGE_NAME = "${env.GIT_URL}".toLowerCase().split('/').last().replaceAll('.git', '')
         IMAGE_REPO = "${DOCKER_REGISTRY_URL}/${IMAGE_NAME}"
-        DISCORD_MESSAGE = "`${IMAGE_NAME}:${env.BRANCH_NAME.replaceAll('/', '-')} (${GIT_COMMIT})` build by `${GIT_COMMITTER_NAME}`"
+        DISCORD_MESSAGE = "`${IMAGE_NAME}:${env.BRANCH_NAME.replaceAll('/', '-')} (${GIT_COMMIT.substring(0,8)})` build by `${GIT_COMMITTER_NAME}`"
     }
 
     stages {
@@ -63,8 +63,8 @@ pipeline {
             echo "Success"
 
             script {
-                if(env?.DOCKER_REGISTRY_URL){
-                    discordSend webhookURL: DISCORD_WEBHOOK_URL,
+                if(env.DOCKER_REGISTRY_URL){
+                    discordSend webhookURL: env.DISCORD_WEBHOOK_URL,
                             successful: true,
                             title: "Build Success",
                             link: env.BUILD_URL,
@@ -76,8 +76,8 @@ pipeline {
             echo "Failure"
 
             script {
-                if(env?.DOCKER_REGISTRY_URL){
-                    discordSend webhookURL: DISCORD_WEBHOOK_URL,
+                if(env.DOCKER_REGISTRY_URL){
+                    discordSend webhookURL: env.DISCORD_WEBHOOK_URL,
                             successful: false,
                             title: "Build Failed",
                             link: env.BUILD_URL,
