@@ -60,7 +60,11 @@ pipeline {
         success{
             echo "Success"
 
-            if(env.DISCORD_WEBHOOK_URL){
+            when {
+              expression { env.DISCORD_WEBHOOK_URL }
+            }
+
+            step{
                 discordSend webhookURL: DISCORD_WEBHOOK_URL,
                         successful: true,
                         title: "Build Success",
@@ -71,7 +75,11 @@ pipeline {
         failure {
             echo "Failure"
 
-            if(env.DISCORD_WEBHOOK_URL){
+            when {
+              expression { env.DISCORD_WEBHOOK_URL }
+            }
+
+            step{
                 discordSend webhookURL: DISCORD_WEBHOOK_URL,
                         successful: false,
                         title: "Build Failed",
