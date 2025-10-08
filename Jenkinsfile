@@ -4,7 +4,7 @@ pipeline {
     environment {
         IMAGE_NAME = "${env.GIT_URL}".toLowerCase().split('/').last().replaceAll('.git', '')
         IMAGE_REPO = "${DOCKER_REGISTRY_URL}/${IMAGE_NAME}"
-        DISCORD_MESSAGE = "`${IMAGE_NAME}:${env.BRANCH_NAME.replaceAll('/', '-')} (${GIT_REVISION,length=8})` build by `${GIT_COMMITTER_NAME}`"
+        DISCORD_MESSAGE = "`${IMAGE_NAME}:${env.BRANCH_NAME.replaceAll('/', '-')} (${GIT_COMMIT})` build by `${GIT_COMMITTER_NAME}`"
     }
 
     stages {
