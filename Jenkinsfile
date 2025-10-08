@@ -63,11 +63,7 @@ pipeline {
             echo "Success"
 
             script {
-                when {
-                  expression { env.DOCKER_REGISTRY_URL }
-                }
-
-                if(env.DOCKER_REGISTRY_URL){
+                if(env?.DOCKER_REGISTRY_URL){
                     discordSend webhookURL: DISCORD_WEBHOOK_URL,
                             successful: true,
                             title: "Build Success",
@@ -80,7 +76,7 @@ pipeline {
             echo "Failure"
 
             script {
-                if(env.DOCKER_REGISTRY_URL){
+                if(env?.DOCKER_REGISTRY_URL){
                     discordSend webhookURL: DISCORD_WEBHOOK_URL,
                             successful: false,
                             title: "Build Failed",
